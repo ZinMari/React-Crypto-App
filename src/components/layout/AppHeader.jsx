@@ -1,36 +1,7 @@
-import { Layout, Select, Space, Button } from 'antd';
+import { Layout, Select, Space, Button, Modal } from 'antd';
 import { useCrypto } from '../../context/crypto-contex';
-
-// const options = [
-//     {
-//       label: 'China',
-//       value: 'china',
-//       emoji: '🇨🇳',
-//       desc: 'China (中国)',
-//     },
-//     {
-//       label: 'USA',
-//       value: 'usa',
-//       emoji: '🇺🇸',
-//       desc: 'USA (美国)',
-//     },
-//     {
-//       label: 'Japan',
-//       value: 'japan',
-//       emoji: '🇯🇵',
-//       desc: 'Japan (日本)',
-//     },
-//     {
-//       label: 'Korea',
-//       value: 'korea',
-//       emoji: '🇰🇷',
-//       desc: 'Korea (韩国)',
-//     },
-//   ];
-
-const handleChange = (value) => {
-console.log(`selected ${value}`);
-};
+import { useState, useEffect } from 'react';
+import CoinIfoModal from '../CoinInfoModal';
 
 const headerStyle = {
     width: '100%',
@@ -44,19 +15,41 @@ const headerStyle = {
 
 export default function AppHeader(){
     const {crypto} = useCrypto();
+    const [select, setSelect] = useState(false);
+    const [coin, setCoin] = useState(null);
+    const [modal, setModal] = useState(false);
+
+    useEffect(()=>{
+        const keypress = event => {
+            if(event.key === '/') {
+                setSelect((oldValue)=>!oldValue)
+            }
+        }
+        document.addEventListener('keypress', keypress)
+        return ()=> document.removeEventListener('keypress', keypress)
+    }, [])
+
+    function handleSelect(value){
+        setCoin(crypto.find(c => c.id === value))
+        setModal(true)
+    }
+
     return (
         <Layout.Header style={headerStyle}>
             <Select
                 style={{
                 width: 250,
                 }}
+                open={select}
                 value="press / to open"
-                defaultValue={['china']}
                 options={crypto.map(coin => ({
                    label: coin.name,
                     value: coin.id,
                     icon: coin.icon
                 }))}
+                optionLabelProp='label'
+                onSelect={handleSelect}
+                onClick={()=>setSelect((oldValue)=>!oldValue)}
                 optionRender={(option) => (
                 <Space>
                     <img style={{width: 20}} src={option.data.icon} alt={option.data.label}/> {option.data.label}
@@ -64,6 +57,10 @@ export default function AppHeader(){
                 )}
             />
             <Button type="primary">Add Asset</Button>
+
+            <Modal open={modal} onCancel={()=>setModal(false)} footer={null}>
+                <CoinIfoModal coin={coin}/>
+            </Modal>
         </Layout.Header>
     );
 }
