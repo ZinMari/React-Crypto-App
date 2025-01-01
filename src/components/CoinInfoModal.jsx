@@ -1,14 +1,10 @@
 import {Flex, Tag, Typography, Divider} from 'antd'
+import CoinInfo from './CoinInfo';
 
 function CoinIfoModal({coin}){
     return (
         <>
-            <Flex align='center'>
-                <img src={coin.icon} alt={coin.name} style={{width: 40, marginRight: 30}}/>
-                <Typography.Title level={2} style={{margin: 0}}>
-                    ({coin.symbol}) {coin.name}
-                </Typography.Title>
-            </Flex>
+            <CoinInfo coin={coin} widthSymbol/>
             <Divider/>
             <Typography.Paragraph>
                 <Typography.Text strong>1 hour:</Typography.Text>
