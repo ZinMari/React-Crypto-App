@@ -34,7 +34,7 @@ export default function AppContent(){
                 $
             </Typography.Title>
             <PortfolioChart></PortfolioChart>
-
+            <AssetsTable></AssetsTable>
         </Layout.Content>
     );
 }
