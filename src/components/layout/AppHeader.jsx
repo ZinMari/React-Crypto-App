@@ -64,8 +64,14 @@ export default function AppHeader(){
                 <CoinIfoModal coin={coin}/>
             </Modal>
 
-            <Drawer width={600} title="Add asset" onClose={()=>setDrawer(false)} open={drawer}>
-                
+            <Drawer 
+                width={600} 
+                title="Add asset" 
+                onClose={()=>setDrawer(false)} 
+                open={drawer}
+                destroyOnClose
+            >
+                <AddAssetForm onClose={()=>setDrawer(false)}/>
             </Drawer>
         </Layout.Header>
     );
